@@ -1,0 +1,7 @@
+# В репозиторий попадают только файлы сайта (он публичный)
+/*
+!/.gitignore
+!/index.html
+!/styles.css
+!/script.js
+!/images/

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>БЕЗПЕЧНИЙ ВОДІЙ — перевезення та доставка по Україні</title>
+  <meta name="description" content="Безпечний водій: перевезення пасажирів з точки А в точку Б, доставка посилок, квітів і продуктів, перевезення тварин по всій Україні. Акуратно, вчасно, з турботою.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Шапка -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="#top" class="logo">
+        <span class="logo__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <span class="logo__text">Безпечний<br><b>водій</b></span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#services">Послуги</a>
+        <a href="#how">Як це працює</a>
+        <a href="#safety">Безпека</a>
+        <a href="#prices">Тарифи</a>
+        <a href="#faq">Питання</a>
+        <a href="#contacts">Контакти</a>
+      </nav>
+
+      <div class="header__actions">
+        <a href="tel:+380000000000" class="header__phone">+380 (00) 000-00-00</a>
+        <a href="#order" class="btn btn--primary btn--sm">Замовити</a>
+        <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Перший екран + форма замовлення -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <span class="badge">Працюємо по всій Україні 24/7</span>
+          <h1>Безпечно довеземо <span class="accent">вас</span> та&nbsp;ваші <span class="accent">речі</span></h1>
+          <p class="hero__lead">Пасажирські перевезення з точки А в точку Б, доставка посилок, квітів і продуктів, перевезення тварин. Досвідчені водії, спокійна їзда та точний час подачі.</p>
+          <!-- Фото: Bestami Sarıkaya, Unsplash (unsplash.com/photos/73XAgT8DOpo). Замініть на фото свого авто. -->
+          <figure class="hero__photo">
+            <img src="images/car.jpg" alt="Білий седан на дорозі біля моря" width="1400" height="951">
+          </figure>
+          <ul class="hero__stats">
+            <li><b>10+</b><span>років без ДТП</span></li>
+            <li><b>15 хв</b><span>середній час подачі</span></li>
+            <li><b>5 000+</b><span>виконаних поїздок</span></li>
+          </ul>
+        </div>
+
+        <form class="order card" id="order" novalidate>
+          <h2 class="order__title">Розрахувати поїздку</h2>
+
+          <div class="tabs" role="tablist">
+            <label class="tab"><input type="radio" name="type" value="Пасажири" checked><span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Пасажири</span></label>
+            <label class="tab"><input type="radio" name="type" value="Посилки"><span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+              Посилки</span></label>
+            <label class="tab"><input type="radio" name="type" value="Продукти"><span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              Продукти</span></label>
+            <label class="tab"><input type="radio" name="type" value="Тварини"><span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="10.5" r="1.8"/><circle cx="9" cy="5.5" r="1.8"/><circle cx="15" cy="5.5" r="1.8"/><circle cx="18.5" cy="10.5" r="1.8"/><path d="M12 12c-2.8 0-5.5 3.3-5.5 5.8 0 1.7 1.3 2.7 3 2.7 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.7 0 3-1 3-2.7 0-2.5-2.7-5.8-5.5-5.8z"/></svg>
+              Тварини</span></label>
+          </div>
+
+          <div class="route">
+            <div class="field field--route">
+              <span class="point point--a">А</span>
+              <input type="text" name="from" placeholder="Звідки" required>
+            </div>
+            <div class="field field--route">
+              <span class="point point--b">Б</span>
+              <input type="text" name="to" placeholder="Куди" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <input type="date" name="date" aria-label="Дата">
+            </div>
+            <div class="field">
+              <input type="time" name="time" aria-label="Час">
+            </div>
+          </div>
+
+          <div class="field">
+            <input type="text" name="name" placeholder="Ваше ім'я" required>
+          </div>
+          <div class="field">
+            <input type="tel" name="phone" placeholder="+380 (__) ___-__-__" required>
+          </div>
+          <div class="field">
+            <textarea name="comment" rows="2" placeholder="Коментар: кількість пасажирів, дитяче крісло, багаж…"></textarea>
+          </div>
+
+          <input type="text" name="website" class="order__trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <button type="submit" class="btn btn--primary btn--block" id="orderSubmit">Надіслати заявку</button>
+          <p class="order__note">Передзвонимо протягом 5 хвилин і назвемо точну вартість</p>
+          <div class="order__error" id="orderError" hidden>
+            Не вдалося надіслати заявку. Спробуйте ще раз або зателефонуйте нам: <a href="tel:+380000000000">+380 (00) 000-00-00</a>
+          </div>
+          <div class="order__success" id="orderSuccess" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <div><b>Заявку прийнято!</b><br>Незабаром ми вам зателефонуємо.</div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Послуги -->
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section__head">
+          <span class="eyebrow">Наші послуги</span>
+          <h2>Що ми робимо</h2>
+        </div>
+        <div class="services">
+          <article class="service card">
+            <div class="service__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2.7-3.6A2 2 0 0 0 13.7 6H6.3a2 2 0 0 0-1.8 1.1L3 10v6c0 .6.4 1 1 1h1"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/></svg>
+            </div>
+            <h3>Перевезення пасажирів</h3>
+            <p>Поїздки містом і між містами України з точки А в точку Б. Трансфер на вокзал і автостанцію, поїздки з дітьми та літніми людьми.</p>
+            <ul class="checklist">
+              <li>Дитячі крісла на запит</li>
+              <li>Допомога з багажем</li>
+              <li>Зустріч з табличкою</li>
+            </ul>
+          </article>
+          <article class="service card">
+            <div class="service__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+            </div>
+            <h3>Посилки та квіти</h3>
+            <p>Привеземо невеликі посилки, документи, подарунки й букети. Бережно в салоні, передача з рук у руки.</p>
+            <ul class="checklist">
+              <li>Документи та ключі</li>
+              <li>Букети й подарунки до свята</li>
+              <li>Фото при врученні</li>
+            </ul>
+          </article>
+          <article class="service card">
+            <div class="service__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <h3>Доставка продуктів</h3>
+            <p>Купимо й привеземо продукти з магазину чи ринку, доставимо замовлення для кафе та ресторанів із дотриманням температурного режиму.</p>
+            <ul class="checklist">
+              <li>Покупка за вашим списком</li>
+              <li>Термосумки для заморожених продуктів</li>
+              <li>Доставка в день замовлення</li>
+            </ul>
+          </article>
+          <article class="service card">
+            <div class="service__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="10.5" r="1.8"/><circle cx="9" cy="5.5" r="1.8"/><circle cx="15" cy="5.5" r="1.8"/><circle cx="18.5" cy="10.5" r="1.8"/><path d="M12 12c-2.8 0-5.5 3.3-5.5 5.8 0 1.7 1.3 2.7 3 2.7 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.7 0 3-1 3-2.7 0-2.5-2.7-5.8-5.5-5.8z"/></svg>
+            </div>
+            <h3>Перевезення тварин</h3>
+            <p>Відвеземо вашого улюбленця до ветклініки, грумера, на передержку чи в інше місто. Спокійно, з перервами в довгій дорозі.</p>
+            <ul class="checklist">
+              <li>Коти й собаки в переносці</li>
+              <li>Захисний чохол на сидіння</li>
+              <li>Можна з власником або без</li>
+            </ul>
+          </article>
+        </div>
+        <p class="services__note">Возимо лише те, що вміщується в легковий автомобіль. Меблі, велику техніку та будматеріали не перевозимо.</p>
+      </div>
+    </section>
+
+    <!-- Як це працює -->
+    <section class="section section--alt" id="how">
+      <div class="container">
+        <div class="section__head">
+          <span class="eyebrow">Просто і швидко</span>
+          <h2>Як це працює</h2>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step__num">1</span>
+            <h3>Залиште заявку</h3>
+            <p>Вкажіть на сайті або телефоном, звідки й куди потрібно їхати.</p>
+          </li>
+          <li class="step">
+            <span class="step__num">2</span>
+            <h3>Дізнайтеся ціну</h3>
+            <p>Ми передзвонимо, назвемо вартість і час подачі. Ціна не змінюється в дорозі.</p>
+          </li>
+          <li class="step">
+            <span class="step__num">3</span>
+            <h3>Водій у дорозі</h3>
+            <p>Надішлемо номер авто й контакт водія. Він приїде точно вчасно.</p>
+          </li>
+          <li class="step">
+            <span class="step__num">4</span>
+            <h3>Ви на місці</h3>
+            <p>Доставимо вас, посилку чи улюбленця в точку Б. Оплата готівкою, карткою або переказом.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Безпека -->
+    <section class="section" id="safety">
+      <div class="container safety">
+        <div class="safety__text">
+          <span class="eyebrow">Головне для нас</span>
+          <h2>Безпека в кожній поїздці</h2>
+          <p>Назва «Безпечний водій» — це наша обіцянка. Ми не женемо, дотримуємося правил і дбаємо про кожного пасажира, кожну посилку й кожного хвостатого друга.</p>
+          <a href="#order" class="btn btn--primary">Замовити поїздку</a>
+        </div>
+        <div class="features">
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+            <h3>Досвідчені водії</h3>
+            <p>Стаж від 10 років, перевірка документів і регулярний медогляд.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <h3>Справні авто</h3>
+            <p>Техогляд перед кожною зміною, чистий і теплий салон.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <h3>Страхування</h3>
+            <p>Пасажири та посилки застраховані на час поїздки.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+            <h3>Точно вчасно</h3>
+            <p>Подача хвилина в хвилину. Якщо затримуємося — попередимо заздалегідь.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Тарифи -->
+    <section class="section section--alt" id="prices">
+      <div class="container">
+        <div class="section__head">
+          <span class="eyebrow">Чесні ціни</span>
+          <h2>Тарифи</h2>
+          <p class="section__sub">Вартість фіксується під час замовлення і не змінюється в дорозі.</p>
+        </div>
+        <div class="prices">
+          <div class="price card">
+            <h3>Містом</h3>
+            <p class="price__desc">Поїздка пасажирів з точки А в точку Б</p>
+            <div class="price__value">від <b>150 ₴</b></div>
+            <ul class="checklist">
+              <li>Подача від 15 хвилин</li>
+              <li>До 4 пасажирів</li>
+              <li>Очікування 5 хвилин безкоштовно</li>
+            </ul>
+            <a href="#order" class="btn btn--outline btn--block">Замовити</a>
+          </div>
+          <div class="price card price--featured">
+            <span class="price__tag">Популярне</span>
+            <h3>Доставка</h3>
+            <p class="price__desc">Посилки, квіти й продукти містом</p>
+            <div class="price__value">від <b>200 ₴</b></div>
+            <ul class="checklist">
+              <li>Доставка в день замовлення</li>
+              <li>Покупка за списком</li>
+              <li>Фотозвіт про передачу</li>
+            </ul>
+            <a href="#order" class="btn btn--primary btn--block">Замовити</a>
+          </div>
+          <div class="price card">
+            <h3>Міжмісто</h3>
+            <p class="price__desc">Поїздки та доставка між містами України</p>
+            <div class="price__value"><b>25 ₴</b>/км</div>
+            <ul class="checklist">
+              <li>Зупинки дорогою</li>
+              <li>Трансфер на вокзал і до кордону</li>
+              <li>Попереднє замовлення</li>
+            </ul>
+            <a href="#order" class="btn btn--outline btn--block">Замовити</a>
+          </div>
+          <div class="price card">
+            <h3>З тваринами</h3>
+            <p class="price__desc">Перевезення котів, собак та інших улюбленців</p>
+            <div class="price__value"><b>30–35 ₴</b>/км</div>
+            <ul class="checklist">
+              <li>Захисний чохол на сидіння</li>
+              <li>Зупинки для прогулянки</li>
+              <li>З власником або без</li>
+            </ul>
+            <a href="#order" class="btn btn--outline btn--block">Замовити</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Питання -->
+    <section class="section" id="faq">
+      <div class="container container--narrow">
+        <div class="section__head">
+          <span class="eyebrow">Допомога</span>
+          <h2>Часті питання</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Як швидко приїде машина?</summary>
+            <p>У середньому водій приїжджає через 15 хвилин після підтвердження замовлення. Поїздку можна замовити й заздалегідь — на потрібну дату та час.</p>
+          </details>
+          <details>
+            <summary>Чи можна їхати з дитиною?</summary>
+            <p>Так. Вкажіть у коментарі вік дитини, і водій приїде з відповідним дитячим кріслом або бустером.</p>
+          </details>
+          <details>
+            <summary>Що ви доставляєте?</summary>
+            <p>Усе, що вміщується в легковий автомобіль: документи, невеликі посилки, букети, подарунки, продукти й замовлення з магазинів. Меблі, велику техніку та будматеріали не перевозимо.</p>
+          </details>
+          <details>
+            <summary>Скільки коштує поїздка в інше місто?</summary>
+            <p>25 гривень за кілометр. Точну суму назвемо одразу після заявки — вона не зміниться в дорозі.</p>
+          </details>
+          <details>
+            <summary>Скільки коштує перевезення тварин?</summary>
+            <p>30–35 гривень за кілометр. Точну ціну назвемо після заявки: вкажіть у коментарі, хто їде, вагу тварини та чи є переноска.</p>
+          </details>
+          <details>
+            <summary>Як можна оплатити?</summary>
+            <p>Готівкою водію, банківською карткою або переказом. Для ФОП і компаній — безготівковий розрахунок за договором.</p>
+          </details>
+          <details>
+            <summary>Ви працюєте вночі?</summary>
+            <p>Так, ми працюємо цілодобово, без вихідних і свят.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Заклик -->
+    <section class="cta">
+      <div class="container cta__inner">
+        <div>
+          <h2>Потрібно поїхати чи щось доставити?</h2>
+          <p>Зателефонуйте нам або залиште заявку — відповімо за 5 хвилин.</p>
+        </div>
+        <div class="cta__actions">
+          <a href="tel:+380000000000" class="btn btn--light">Зателефонувати</a>
+          <a href="#order" class="btn btn--ghost">Залишити заявку</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Підвал -->
+  <footer class="footer" id="contacts">
+    <div class="container footer__inner">
+      <div class="footer__col">
+        <a href="#top" class="logo logo--light">
+          <span class="logo__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          </span>
+          <span class="logo__text">Безпечний<br><b>водій</b></span>
+        </a>
+        <p>Перевезення пасажирів і тварин, доставка посилок, квітів і продуктів по всій Україні.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Контакти</h4>
+        <a href="tel:+380000000000">+380 (00) 000-00-00</a>
+        <a href="mailto:info@example.com.ua">info@example.com.ua</a>
+        <span>Щодня, 24/7</span>
+      </div>
+      <div class="footer__col">
+        <h4>Послуги</h4>
+        <a href="#services">Перевезення пасажирів</a>
+        <a href="#services">Посилки та квіти</a>
+        <a href="#services">Доставка продуктів</a>
+        <a href="#services">Перевезення тварин</a>
+      </div>
+      <div class="footer__col">
+        <h4>Месенджери</h4>
+        <a href="#">Telegram</a>
+        <a href="#">Viber</a>
+        <a href="#">WhatsApp</a>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <span>© <span id="year"></span> Безпечний водій</span>
+      <a href="#top">Нагору ↑</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

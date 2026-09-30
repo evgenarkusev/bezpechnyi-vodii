@@ -1,7 +1,7 @@
 // Куди надсилати заявки:
 //   'send.php' — якщо сайт на хостингу з PHP;
 //   адреса Cloudflare Worker, напр. 'https://bezpechnyi-vodii.ваш-акаунт.workers.dev'
-const ORDER_ENDPOINT = 'send.php';
+const ORDER_ENDPOINT = 'https://bezpechnyi-vodii-zayavky.evgenarkusev.workers.dev';
 
 // Мобільне меню
 const burger = document.getElementById('burger');

@@ -29,6 +29,148 @@ form.querySelectorAll('input[name="type"]').forEach((radio) => {
   radio.addEventListener('change', () => { comment.placeholder = hints[radio.value]; });
 });
 
+// Підказки адрес у полях «Звідки» і «Куди»:
+// спершу миттєво — райони й вокзали Києва зі списку в HTML,
+// потім — будь-яка адреса України з сервісу Photon (дані OpenStreetMap).
+const KYIV_PLACES = [...document.querySelectorAll('#kyiv-places option')].map((o) => o.value);
+const ADDRESS_API = 'https://photon.komoot.io/api/';
+const UKRAINE_BBOX = '22.1,44.3,40.3,52.4';
+
+function formatAddress(p) {
+  const main = p.housenumber
+    ? `${p.street || p.name}, ${p.housenumber}`
+    : (p.name || p.street || '');
+  const parts = [
+    p.district,
+    p.city,
+    p.city ? '' : p.county, // для сіл — район
+    p.city === 'Київ' ? '' : p.state, // для Києва область зайва
+  ];
+  const extra = parts.filter((part, i) => part && part !== main && parts.indexOf(part) === i);
+  return { main, extra: extra.join(', ') };
+}
+
+function setupAddressSuggest(input) {
+  const list = document.createElement('ul');
+  list.className = 'suggest';
+  list.setAttribute('role', 'listbox');
+  list.hidden = true;
+  input.closest('.field').append(list);
+
+  let items = [];
+  let active = -1;
+  let showCredit = false;
+  let timer;
+  let controller;
+
+  function render() {
+    list.replaceChildren();
+    items.forEach((item, i) => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.className = i === active ? 'is-active' : '';
+      const b = document.createElement('b');
+      b.textContent = item.main;
+      li.append(b);
+      if (item.extra) {
+        const span = document.createElement('span');
+        span.textContent = item.extra;
+        li.append(span);
+      }
+      // mousedown, а не click: спрацьовує до того, як поле втратить фокус
+      li.addEventListener('mousedown', (e) => { e.preventDefault(); choose(i); });
+      list.append(li);
+    });
+    if (showCredit && items.length) {
+      const credit = document.createElement('li');
+      credit.className = 'suggest__credit';
+      credit.textContent = 'Адреси: © OpenStreetMap';
+      list.append(credit);
+    }
+    list.hidden = items.length === 0;
+  }
+
+  function choose(i) {
+    const item = items[i];
+    input.value = item.extra ? `${item.main}, ${item.extra}` : item.main;
+    close();
+    // Прибирає червону рамку помилки; власний обробник підказок ігнорує цю подію
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  function close() {
+    items = [];
+    active = -1;
+    list.hidden = true;
+    clearTimeout(timer);
+    if (controller) controller.abort();
+  }
+
+  input.addEventListener('input', (e) => {
+    if (!e.isTrusted) return;
+    const q = input.value.trim();
+    clearTimeout(timer);
+    if (controller) controller.abort();
+    if (!q) return close();
+
+    const lower = q.toLowerCase();
+    const local = KYIV_PLACES
+      .filter((place) => place.toLowerCase().includes(lower))
+      .slice(0, 5)
+      .map((place) => ({ main: place, extra: '' }));
+    items = local;
+    active = -1;
+    showCredit = false;
+    render();
+
+    if (q.length < 3) return;
+    timer = setTimeout(async () => {
+      controller = new AbortController();
+      const url = `${ADDRESS_API}?q=${encodeURIComponent(q)}&limit=15&lang=default&bbox=${UKRAINE_BBOX}&lat=50.45&lon=30.52`;
+      try {
+        const res = await fetch(url, { signal: controller.signal });
+        const data = await res.json();
+        const seen = new Set(local.map((item) => item.main));
+        const found = data.features
+          .filter((f) => f.properties.countrycode === 'UA')
+          .map((f) => formatAddress(f.properties))
+          .filter((item) => {
+            const key = `${item.main}|${item.extra}`;
+            if (!item.main || seen.has(key) || seen.has(item.main)) return false;
+            seen.add(key);
+            return true;
+          });
+        items = [...local, ...found].slice(0, 8);
+        active = -1;
+        showCredit = found.length > 0;
+        render();
+      } catch (err) {
+        if (err.name !== 'AbortError') console.warn('Підказки адрес недоступні:', err);
+      }
+    }, 300);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (list.hidden) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const step = e.key === 'ArrowDown' ? 1 : -1;
+      active = (active + step + items.length) % items.length;
+      render();
+    } else if (e.key === 'Enter' && active >= 0) {
+      e.preventDefault();
+      choose(active);
+    } else if (e.key === 'Escape') {
+      close();
+    }
+  });
+
+  input.addEventListener('blur', close);
+}
+
+setupAddressSuggest(form.elements.from);
+setupAddressSuggest(form.elements.to);
+
 // Сьогоднішня дата за замовчуванням
 const today = new Date();
 form.elements.date.value = today.toISOString().slice(0, 10);

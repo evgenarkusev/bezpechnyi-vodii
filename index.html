@@ -81,13 +81,54 @@
           <div class="route">
             <div class="field field--route">
               <span class="point point--a">А</span>
-              <input type="text" name="from" placeholder="Звідки" required>
+              <input type="text" name="from" placeholder="Звідки" list="kyiv-places" autocomplete="off" required>
             </div>
             <div class="field field--route">
               <span class="point point--b">Б</span>
-              <input type="text" name="to" placeholder="Куди" required>
+              <input type="text" name="to" placeholder="Куди" list="kyiv-places" autocomplete="off" required>
             </div>
           </div>
+
+          <!-- Підказки для полів «Звідки» і «Куди»: райони, масиви та вокзали Києва -->
+          <datalist id="kyiv-places">
+            <option value="Голосіївський район, Київ">
+            <option value="Дарницький район, Київ">
+            <option value="Деснянський район, Київ">
+            <option value="Дніпровський район, Київ">
+            <option value="Оболонський район, Київ">
+            <option value="Печерський район, Київ">
+            <option value="Подільський район, Київ">
+            <option value="Святошинський район, Київ">
+            <option value="Солом'янський район, Київ">
+            <option value="Шевченківський район, Київ">
+            <option value="Академмістечко, Святошинський район">
+            <option value="Березняки, Дніпровський район">
+            <option value="Борщагівка, Святошинський район">
+            <option value="Виноградар, Подільський район">
+            <option value="Відрадний, Солом'янський район">
+            <option value="Воскресенка, Дніпровський район">
+            <option value="Голосіїв, Голосіївський район">
+            <option value="Дарниця, Дарницький район">
+            <option value="Лівобережний масив, Дніпровський район">
+            <option value="Лісовий масив, Деснянський район">
+            <option value="Лук'янівка, Шевченківський район">
+            <option value="Нивки, Шевченківський район">
+            <option value="Оболонь, Оболонський район">
+            <option value="Осокорки, Дарницький район">
+            <option value="Позняки, Дарницький район">
+            <option value="Поділ, Подільський район">
+            <option value="Русанівка, Дніпровський район">
+            <option value="Теремки, Голосіївський район">
+            <option value="Троєщина, Деснянський район">
+            <option value="Харківський масив, Дарницький район">
+            <option value="Печерськ, Печерський район">
+            <option value="Центр міста (Хрещатик), Київ">
+            <option value="Центральний залізничний вокзал, Київ">
+            <option value="Вокзал «Дарниця», Київ">
+            <option value="Центральний автовокзал, Київ">
+            <option value="Аеропорт «Бориспіль»">
+            <option value="Аеропорт «Київ» (Жуляни)">
+          </datalist>
 
           <div class="row">
             <div class="field">

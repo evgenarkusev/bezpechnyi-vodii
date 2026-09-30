@@ -167,6 +167,18 @@ h1, h2, h3, h4 { color: var(--dark); line-height: 1.2; font-weight: 800; }
 .point--a { background: var(--primary); }
 .point--b { background: var(--accent); }
 
+/* Попередній розрахунок вартості */
+.estimate {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 12px 16px; border-radius: 12px;
+  background: var(--bg-alt); color: var(--text);
+  font-size: 14px;
+}
+.estimate[hidden] { display: none; }
+.estimate b { font-size: 18px; color: var(--primary-dark); }
+.estimate small { color: var(--muted); font-size: 12px; }
+.estimate--error { background: rgba(229,72,77,.08); color: #b4282d; }
+
 /* Підказки адрес */
 .suggest {
   position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20;

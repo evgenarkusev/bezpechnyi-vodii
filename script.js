@@ -35,16 +35,23 @@ form.querySelectorAll('input[name="type"]').forEach((radio) => {
 const KYIV_PLACES = [...document.querySelectorAll('#kyiv-places option')].map((o) => o.value);
 const ADDRESS_API = 'https://photon.komoot.io/api/';
 const UKRAINE_BBOX = '22.1,44.3,40.3,52.4';
+// Трохи вище в списку — адреси ближче до Києва, але великі міста не губляться
+const KYIV_BIAS = 'lat=50.45&lon=30.52&location_bias_scale=0.6';
+
+function photonUrl(q, limit) {
+  return `${ADDRESS_API}?q=${encodeURIComponent(q)}&limit=${limit}&lang=default&bbox=${UKRAINE_BBOX}&${KYIV_BIAS}`;
+}
 
 function formatAddress(p) {
   const main = p.housenumber
     ? `${p.street || p.name}, ${p.housenumber}`
     : (p.name || p.street || '');
+  // для Києва область зайва, для сіл — показуємо район
   const parts = [
     p.district,
     p.city,
-    p.city ? '' : p.county, // для сіл — район
-    p.city === 'Київ' ? '' : p.state, // для Києва область зайва
+    p.city ? '' : p.county,
+    p.city === 'Київ' ? '' : p.state,
   ];
   const extra = parts.filter((part, i) => part && part !== main && parts.indexOf(part) === i);
   return { main, extra: extra.join(', ') };
@@ -93,9 +100,12 @@ function setupAddressSuggest(input) {
   function choose(i) {
     const item = items[i];
     input.value = item.extra ? `${item.main}, ${item.extra}` : item.main;
+    if (item.coords) input.dataset.coords = item.coords.join(',');
+    else delete input.dataset.coords;
     close();
     // Прибирає червону рамку помилки; власний обробник підказок ігнорує цю подію
     input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('addresschange'));
   }
 
   function close() {
@@ -108,6 +118,7 @@ function setupAddressSuggest(input) {
 
   input.addEventListener('input', (e) => {
     if (!e.isTrusted) return;
+    delete input.dataset.coords; // адресу змінили вручну — координати вже не ті
     const q = input.value.trim();
     clearTimeout(timer);
     if (controller) controller.abort();
@@ -126,14 +137,13 @@ function setupAddressSuggest(input) {
     if (q.length < 3) return;
     timer = setTimeout(async () => {
       controller = new AbortController();
-      const url = `${ADDRESS_API}?q=${encodeURIComponent(q)}&limit=15&lang=default&bbox=${UKRAINE_BBOX}&lat=50.45&lon=30.52`;
       try {
-        const res = await fetch(url, { signal: controller.signal });
+        const res = await fetch(photonUrl(q, 15), { signal: controller.signal });
         const data = await res.json();
         const seen = new Set(local.map((item) => item.main));
         const found = data.features
           .filter((f) => f.properties.countrycode === 'UA')
-          .map((f) => formatAddress(f.properties))
+          .map((f) => ({ ...formatAddress(f.properties), coords: f.geometry.coordinates }))
           .filter((item) => {
             const key = `${item.main}|${item.extra}`;
             if (!item.main || seen.has(key) || seen.has(item.main)) return false;
@@ -165,11 +175,124 @@ function setupAddressSuggest(input) {
     }
   });
 
-  input.addEventListener('blur', close);
+  input.addEventListener('blur', () => {
+    close();
+    input.dispatchEvent(new Event('addresschange'));
+  });
 }
 
 setupAddressSuggest(form.elements.from);
 setupAddressSuggest(form.elements.to);
+
+// Попередній розрахунок: відстань дорогами (сервіс OSRM) × тариф за кілометр
+const PRICE_PER_KM = 25;
+const ANIMALS_PRICE_PER_KM = [30, 35];
+// Мінімальна вартість поїздки — як «від …» у розділі «Тарифи»
+const MIN_PRICE = { 'Пасажири': 150, 'Посилки': 200, 'Продукти': 200, 'Тварини': 150 };
+const ROUTE_API = 'https://router.project-osrm.org/route/v1/driving/';
+
+const estimateBox = document.getElementById('estimate');
+const geocodeCache = new Map();
+let lastRoute = null; // { key, km, minutes }
+let estimateSeq = 0;
+
+async function coordsOf(input) {
+  if (input.dataset.coords) return input.dataset.coords.split(',').map(Number);
+  let q = input.value.trim();
+  // Масиви Києва зі швидкого списку (напр. «Троєщина») є й серед сіл — уточнюємо місто
+  if (KYIV_PLACES.includes(q) && !q.includes('Київ')) q += ', Київ';
+  if (!geocodeCache.has(q)) {
+    const res = await fetch(photonUrl(q, 1));
+    const data = await res.json();
+    const f = data.features.find((feature) => feature.properties.countrycode === 'UA');
+    geocodeCache.set(q, f ? f.geometry.coordinates : null);
+  }
+  return geocodeCache.get(q);
+}
+
+const roundUp10 = (x) => Math.ceil(x / 10) * 10;
+const uah = (x) => `${roundUp10(x).toLocaleString('uk-UA')} ₴`;
+
+function showEstimate(lines, isError) {
+  estimateBox.replaceChildren(...lines.map(([tag, text]) => {
+    const el = document.createElement(tag);
+    el.textContent = text;
+    return el;
+  }));
+  estimateBox.classList.toggle('estimate--error', Boolean(isError));
+  estimateBox.hidden = false;
+}
+
+function renderPrice() {
+  const type = form.elements.type.value;
+  const { km, minutes } = lastRoute;
+  const min = MIN_PRICE[type];
+  let price;
+  if (type === 'Тварини') {
+    const [low, high] = ANIMALS_PRICE_PER_KM.map((rate) => Math.max(min, km * rate));
+    price = low === high ? uah(low) : `${uah(low)} – ${uah(high)}`;
+  } else {
+    price = uah(Math.max(min, km * PRICE_PER_KM));
+  }
+  const kmText = km.toLocaleString('uk-UA', { maximumFractionDigits: 1 });
+  const time = minutes < 60 ? `${minutes} хв` : `${Math.floor(minutes / 60)} год ${minutes % 60} хв`;
+  showEstimate([
+    ['span', `Відстань ≈ ${kmText} км · у дорозі ≈ ${time}`],
+    ['b', `Орієнтовна вартість: ${price}`],
+    ['small', 'Точну ціну підтвердимо телефоном'],
+  ]);
+  form.elements.estimate.value = `${kmText} км, ${price}`;
+}
+
+async function updateEstimate() {
+  const from = form.elements.from;
+  const to = form.elements.to;
+  const seq = ++estimateSeq;
+  form.elements.estimate.value = '';
+  if (!from.value.trim() || !to.value.trim()) {
+    estimateBox.hidden = true;
+    return;
+  }
+  const key = `${from.value.trim()}|${from.dataset.coords || ''}|${to.value.trim()}|${to.dataset.coords || ''}`;
+  if (lastRoute && lastRoute.key === key) return renderPrice();
+
+  showEstimate([['span', 'Розраховуємо відстань…']]);
+  try {
+    const [a, b] = await Promise.all([coordsOf(from), coordsOf(to)]);
+    if (seq !== estimateSeq) return;
+    if (!a || !b) {
+      showEstimate([['span', 'Не знайшли адресу на карті — оберіть її з підказок або назвемо ціну телефоном.']], true);
+      return;
+    }
+    const res = await fetch(`${ROUTE_API}${a.join(',')};${b.join(',')}?overview=false`);
+    const data = await res.json();
+    if (seq !== estimateSeq) return;
+    if (data.code !== 'Ok' || !data.routes.length) throw new Error(data.code);
+    lastRoute = {
+      key,
+      km: data.routes[0].distance / 1000,
+      minutes: Math.max(1, Math.round(data.routes[0].duration / 60)),
+    };
+    renderPrice();
+  } catch (err) {
+    if (seq !== estimateSeq) return;
+    console.warn('Не вдалося розрахувати маршрут:', err);
+    showEstimate([['span', 'Не вдалося розрахувати відстань — назвемо ціну телефоном.']], true);
+  }
+}
+
+form.elements.from.addEventListener('addresschange', updateEstimate);
+form.elements.to.addEventListener('addresschange', updateEstimate);
+form.querySelectorAll('input[name="type"]').forEach((radio) => {
+  radio.addEventListener('change', () => { if (lastRoute && !estimateBox.hidden) updateEstimate(); });
+});
+form.addEventListener('reset', () => {
+  estimateSeq++;
+  lastRoute = null;
+  estimateBox.hidden = true;
+  delete form.elements.from.dataset.coords;
+  delete form.elements.to.dataset.coords;
+});
 
 // Сьогоднішня дата за замовчуванням
 const today = new Date();

@@ -307,6 +307,12 @@ h1, h2, h3, h4 { color: var(--dark); line-height: 1.2; font-weight: 800; }
 .price__value b { font-size: 40px; color: var(--dark); }
 .price .checklist { flex: 1; margin-bottom: 8px; }
 .price--featured { border: 2px solid var(--primary); transform: scale(1.03); }
+.km-calc { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; background: var(--bg); font-size: 14px; color: var(--muted); }
+.km-calc__row { display: flex; align-items: center; gap: 8px; color: var(--text); }
+.km-calc__row input { width: 72px; padding: 8px; border: 1px solid var(--border); border-radius: 10px; font: inherit; font-size: 16px; text-align: center; }
+.km-calc__btn { width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 10px; background: #fff; color: var(--primary); font-size: 20px; line-height: 1; cursor: pointer; }
+.km-calc__btn:hover { background: var(--primary); color: #fff; }
+.km-calc__note b { color: var(--primary-dark); font-size: 16px; }
 .price__tag {
   position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
   padding: 4px 14px; border-radius: 99px;
@@ -357,6 +363,22 @@ h1, h2, h3, h4 { color: var(--dark); line-height: 1.2; font-weight: 800; }
   border-top: 1px solid rgba(255,255,255,.1); font-size: 14px;
 }
 
+/* Плаваючі кнопки (лише на мобільних) */
+.fab {
+  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 50; display: none; align-items: center; gap: 10px;
+  transition: opacity .25s, transform .25s;
+}
+.fab.is-hidden { opacity: 0; transform: translateY(20px); pointer-events: none; }
+.fab__call, .fab__order {
+  display: flex; align-items: center; justify-content: center; height: 56px;
+  border-radius: 999px; box-shadow: 0 8px 24px rgba(21,128,61,.35);
+}
+.fab__call { width: 56px; background: #fff; color: var(--primary); border: 2px solid var(--primary); }
+.fab__call svg { width: 24px; height: 24px; }
+.fab__order { padding: 0 26px; background: var(--primary); color: #fff; font-weight: 700; font-size: 16px; }
+.fab__order:active, .fab__call:active { transform: scale(.96); }
+
 /* Адаптив */
 @media (max-width: 1080px) {
   .nav { gap: 18px; }
@@ -367,6 +389,8 @@ h1, h2, h3, h4 { color: var(--dark); line-height: 1.2; font-weight: 800; }
 
 @media (max-width: 900px) {
   .burger { display: flex; }
+  .fab { display: flex; }
+  .footer { padding-bottom: 88px; }
   .nav {
     position: fixed; top: 72px; left: 0; right: 0;
     flex-direction: column; gap: 0;

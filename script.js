@@ -16,6 +16,12 @@ function toggleMenu(open) {
 burger.addEventListener('click', () => toggleMenu(!nav.classList.contains('is-open')));
 nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => toggleMenu(false)));
 
+// Плаваючі кнопки ховаються, коли форма замовлення вже на екрані
+const fab = document.getElementById('fab');
+new IntersectionObserver(([entry]) => {
+  fab.classList.toggle('is-hidden', entry.isIntersecting);
+}, { threshold: 0.2 }).observe(document.getElementById('order'));
+
 // Підказка в коментарі залежить від типу замовлення
 const form = document.getElementById('order');
 const comment = form.elements.comment;
@@ -188,7 +194,7 @@ setupAddressSuggest(form.elements.to);
 const PRICE_PER_KM = 25;
 const ANIMALS_PRICE_PER_KM = [30, 35];
 // Мінімальна вартість поїздки — як «від …» у розділі «Тарифи»
-const MIN_PRICE = { 'Пасажири': 150, 'Посилки': 200, 'Продукти': 200, 'Тварини': 150 };
+const MIN_PRICE = { 'Пасажири': 150, 'Посилки': 400, 'Продукти': 400, 'Тварини': 150 };
 const ROUTE_API = 'https://router.project-osrm.org/route/v1/driving/';
 
 const estimateBox = document.getElementById('estimate');
@@ -292,6 +298,23 @@ form.addEventListener('reset', () => {
   estimateBox.hidden = true;
   delete form.elements.from.dataset.coords;
   delete form.elements.to.dataset.coords;
+});
+
+// Лічильник кілометрів у тарифі «Доставка»
+const deliveryKm = document.getElementById('delivery-km');
+const deliveryTotal = document.getElementById('delivery-total');
+
+function updateDeliveryTotal() {
+  const km = Math.max(0, Number(deliveryKm.value) || 0);
+  deliveryTotal.textContent = uah(Math.max(MIN_PRICE['Посилки'], km * PRICE_PER_KM));
+}
+
+deliveryKm.addEventListener('input', updateDeliveryTotal);
+document.querySelectorAll('.km-calc__btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    deliveryKm.value = Math.max(0, (Number(deliveryKm.value) || 0) + Number(btn.dataset.step));
+    updateDeliveryTotal();
+  });
 });
 
 // Сьогоднішня дата за замовчуванням

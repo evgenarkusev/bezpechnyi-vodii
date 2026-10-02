@@ -328,7 +328,17 @@
             <span class="price__tag">Популярне</span>
             <h3>Доставка</h3>
             <p class="price__desc">Посилки, квіти й продукти містом</p>
-            <div class="price__value">від <b>200 ₴</b></div>
+            <div class="price__value">від <b>400 ₴</b></div>
+            <div class="km-calc">
+              <label for="delivery-km">Кілометраж</label>
+              <div class="km-calc__row">
+                <button type="button" class="km-calc__btn" data-step="-1" aria-label="Менше кілометрів">−</button>
+                <input type="number" id="delivery-km" min="0" step="1" value="0" inputmode="numeric">
+                <span>км</span>
+                <button type="button" class="km-calc__btn" data-step="1" aria-label="Більше кілометрів">+</button>
+              </div>
+              <span class="km-calc__note">25 ₴/км · вартість: <b id="delivery-total" aria-live="polite">400 ₴</b></span>
+            </div>
             <ul class="checklist">
               <li>Доставка в день замовлення</li>
               <li>Покупка за списком</li>
@@ -454,6 +464,14 @@
       <a href="#top">Нагору ↑</a>
     </div>
   </footer>
+
+  <!-- Плаваючі кнопки для мобільної версії -->
+  <div class="fab" id="fab">
+    <a href="tel:+380000000000" class="fab__call" aria-label="Зателефонувати">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </a>
+    <a href="#order" class="fab__order">Замовити</a>
+  </div>
 
   <script src="script.js"></script>
 </body>
